@@ -56,6 +56,6 @@ Once you get the consent of the PSU, you have to register him on E:G.
 #### Call CreateUserAsync
 
 See above to know how much data you have to provide to this method.
-This will return a [UserRegisterResponse]https://github.com/exthand/Exthand.Gateway/blob/master/Models/UserRegisterResponse.cs object.
+This will return a [UserRegisterResponse](https://github.com/exthand/Exthand.Gateway/blob/master/Models/UserRegisterResponse.cs) object.
 
 
