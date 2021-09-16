@@ -116,7 +116,8 @@ PaymentInitRequest paymentInitRequest = new()
 ```
 
 Once the call is executed, you get [PaymentInitResponse](https://github.com/exthand/Exthand.Gateway/blob/master/Models/PaymentInitResponse.cs) object.
-
+In that response, the [ResultStatus](https://github.com/exthand/Exthand.Gateway/blob/master/Models/ResultStatus.cs) indicates if the payment can be initiated.
+Value should be REDIRECT, and redirect url can be found in ```dataString``` property.
 
 
 #### Call PaymentFinalizeAsync
