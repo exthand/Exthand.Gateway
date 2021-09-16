@@ -57,5 +57,9 @@ Once you get the consent of the PSU, you have to register him on E:G.
 
 See above to know how much data you have to provide to this method.
 This will return a [UserRegisterResponse](https://github.com/exthand/Exthand.Gateway/blob/master/Models/UserRegisterResponse.cs) object.
+Normal case, action property should be == "OK", then you have to store the userContext property with your PSU data.
+You will need userContext for all operations, it's __important__ to store it attached to your user and be able to provide it to E/G.
+
+
 
 
