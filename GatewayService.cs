@@ -25,62 +25,13 @@ namespace Exthand.GatewayClient
             _httpClientFactory = httpClientFactory;
         }
 
-        /// <summary>
-        /// Gets the content of the latest Terms & Conditions, Pricvacy Notice and their Version number.
-        /// </summary>
-        /// <returns>TermsDTO object</returns>
-        public async Task<TermsDTO> GetTCAsync()
-        {
-            var client = _httpClientFactory.CreateClient("BankingSdkGatewayClient");
-            var result = await client.GetAsync("ais/gw/tc/latest");
-
-            if (result.IsSuccessStatusCode)
-            {
-                return JsonSerializer.Deserialize<TermsDTO>(await result.Content.ReadAsStringAsync());
-            }
-            else if (result.StatusCode == HttpStatusCode.BadRequest)
-            {
-                var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
-                throw new GatewayException(error.Message);
-            }
-
-            throw new Exception(await result.Content.ReadAsStringAsync());
-        }
+        #region UTILITIES
 
         /// <summary>
-        /// Get the latest version number of the TC & Privacy accepted by the given user.
+        /// Returns a list of activated banks for a given country.
         /// </summary>
-        /// <param name="psuId">Your internal id of the user (PSU)</param>
-        /// <returns>TermsValidatedDTO object</returns>
-        public async Task<TermsValidated> GetTCLatestAsync(string psuId)
-        {
-            TermsValidated termsValidatedDTO = new()
-            {
-                psuId = psuId,
-                Version = -1
-            };
-
-            if (string.IsNullOrEmpty(psuId))
-                return termsValidatedDTO;
-
-            var client = _httpClientFactory.CreateClient("BankingSdkGatewayClient");
-            var result = await client.GetAsync("ais/gw/tc/latest/" + psuId);
-
-            if (result.IsSuccessStatusCode)
-            {
-                return JsonSerializer.Deserialize<TermsValidated>(await result.Content.ReadAsStringAsync());
-            }
-            else if (result.StatusCode == HttpStatusCode.BadRequest)
-            {
-                var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
-                throw new GatewayException(error.Message);
-            }
-
-            throw new Exception(await result.Content.ReadAsStringAsync());
-        }
-
-
-
+        /// <param name="countryCode">ISO-2 of the country ("BE", "FR, etc)</param>
+        /// <returns>A list of Bank objects.</returns>
         public async Task<IEnumerable<Bank>> GetBanksAsync(string countryCode)
         {
             var client = _httpClientFactory.CreateClient("BankingSdkGatewayClient");
@@ -99,14 +50,15 @@ namespace Exthand.GatewayClient
             throw new Exception(await result.Content.ReadAsStringAsync());
         }
 
-        public async Task<BankAccessOption> GetBankAccessOptionsAsync(int connectorId)
+
+        public async Task<string> FindFlowIdAsync(string queryString)
         {
             var client = _httpClientFactory.CreateClient("BankingSdkGatewayClient");
-            var result = await client.GetAsync("ais/access/option/" + connectorId.ToString());
+            var result = await client.GetAsync("ais/access/findFlowId?queryString=" + HttpUtility.UrlEncode(queryString));
 
             if (result.IsSuccessStatusCode)
             {
-                return JsonSerializer.Deserialize<BankAccessOption>(await result.Content.ReadAsStringAsync());
+                return await result.Content.ReadAsStringAsync();
             }
             else if (result.StatusCode == HttpStatusCode.BadRequest)
             {
@@ -116,6 +68,10 @@ namespace Exthand.GatewayClient
             throw new Exception(await result.Content.ReadAsStringAsync());
         }
 
+        #endregion
+
+        #region PIS
+
         public async Task<BankPaymentAccessOption> GetBankPaymentAccessOptionsAsync(int connectorId)
         {
             var client = _httpClientFactory.CreateClient("BankingSdkGatewayClient");
@@ -124,6 +80,88 @@ namespace Exthand.GatewayClient
             if (result.IsSuccessStatusCode)
             {
                 return JsonSerializer.Deserialize<BankPaymentAccessOption>(await result.Content.ReadAsStringAsync());
+            }
+            else if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
+                throw new GatewayException(error.Message);
+            }
+            throw new Exception(await result.Content.ReadAsStringAsync());
+        }
+
+        public async Task<PaymentInitResponse> PaymentInitiateAsync(PaymentInitRequest paymentInitRequest)
+        {
+            var client = _httpClientFactory.CreateClient("BankingSdkGatewayClient");
+
+            var stringContent = new StringContent(JsonSerializer.Serialize<PaymentInitRequest>(paymentInitRequest), Encoding.UTF8, "application/json");
+
+            var result = await client.PostAsync("pis/payment", stringContent);
+
+            if (result.IsSuccessStatusCode)
+            {
+                return JsonSerializer.Deserialize<PaymentInitResponse>(await result.Content.ReadAsStringAsync());
+            }
+            else if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
+                throw new GatewayException(error.Message);
+            }
+            throw new Exception(await result.Content.ReadAsStringAsync());
+        }
+
+        public async Task<PaymentFinalizeResponse> PaymentFinalizeAsync(PaymentFinalizeRequest paymentFinalizeRequest)
+        {
+            var client = _httpClientFactory.CreateClient("BankingSdkGatewayClient");
+
+            var stringContent = new StringContent(JsonSerializer.Serialize<PaymentFinalizeRequest>(paymentFinalizeRequest), Encoding.UTF8, "application/json");
+
+            var result = await client.PostAsync("pis/payment/finalize", stringContent);
+
+            if (result.IsSuccessStatusCode)
+            {
+                return JsonSerializer.Deserialize<PaymentFinalizeResponse>(await result.Content.ReadAsStringAsync());
+            }
+            else if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
+                throw new GatewayException(error.Message);
+            }
+            throw new Exception(await result.Content.ReadAsStringAsync());
+        }
+
+        public async Task<PaymentStatusResponse> PaymentStatusAsync(PaymentStatusRequest paymentStatusRequest)
+        {
+            var client = _httpClientFactory.CreateClient("BankingSdkGatewayClient");
+
+            var stringContent = new StringContent(JsonSerializer.Serialize<PaymentStatusRequest>(paymentStatusRequest), Encoding.UTF8, "application/json");
+
+            var result = await client.PostAsync("pis/payment", stringContent);
+
+            if (result.IsSuccessStatusCode)
+            {
+                return JsonSerializer.Deserialize<PaymentStatusResponse>(await result.Content.ReadAsStringAsync());
+            }
+            else if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
+                throw new GatewayException(error.Message);
+            }
+            throw new Exception(await result.Content.ReadAsStringAsync());
+        }
+
+        #endregion
+
+        #region AIS-BANK-ACCESS
+
+
+        public async Task<BankAccessOption> GetBankAccessOptionsAsync(int connectorId)
+        {
+            var client = _httpClientFactory.CreateClient("BankingSdkGatewayClient");
+            var result = await client.GetAsync("ais/access/option/" + connectorId.ToString());
+
+            if (result.IsSuccessStatusCode)
+            {
+                return JsonSerializer.Deserialize<BankAccessOption>(await result.Content.ReadAsStringAsync());
             }
             else if (result.StatusCode == HttpStatusCode.BadRequest)
             {
@@ -145,7 +183,7 @@ namespace Exthand.GatewayClient
 
             var stringContent = new StringContent(JsonSerializer.Serialize<BankAccessRequest>(bankAccessRequest), Encoding.UTF8, "application/json");
 
-            var result = await client.PostAsync("ais/access",stringContent);
+            var result = await client.PostAsync("ais/access", stringContent);
 
             if (result.IsSuccessStatusCode)
             {
@@ -234,24 +272,6 @@ namespace Exthand.GatewayClient
             throw new Exception(await result.Content.ReadAsStringAsync());
         }
 
-
-        public async Task<string> FindFlowIdAsync(string queryString)
-        {
-            var client = _httpClientFactory.CreateClient("BankingSdkGatewayClient");
-            var result = await client.GetAsync("ais/access/findFlowId?queryString=" + HttpUtility.UrlEncode(queryString));
-
-            if (result.IsSuccessStatusCode)
-            {
-                return await result.Content.ReadAsStringAsync();
-            }
-            else if (result.StatusCode == HttpStatusCode.BadRequest)
-            {
-                var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
-                throw new GatewayException(error.Message);
-            }
-            throw new Exception(await result.Content.ReadAsStringAsync());
-        }
-
         public async Task<BankAccountsResponse> GetBankAccountsAsync(BankAccountsRequest bankAccountsRequest)
         {
             var client = _httpClientFactory.CreateClient("BankingSdkGatewayClient");
@@ -272,65 +292,9 @@ namespace Exthand.GatewayClient
             throw new Exception(await result.Content.ReadAsStringAsync());
         }
 
-        public async Task<PaymentInitResponse> PaymentInitiateAsync(PaymentInitRequest paymentInitRequest)
-        {
-            var client = _httpClientFactory.CreateClient("BankingSdkGatewayClient");
+        #endregion
 
-            var stringContent = new StringContent(JsonSerializer.Serialize<PaymentInitRequest>(paymentInitRequest), Encoding.UTF8, "application/json");
-
-            var result = await client.PostAsync("pis/payment", stringContent);
-
-            if (result.IsSuccessStatusCode)
-            {
-                return JsonSerializer.Deserialize<PaymentInitResponse>(await result.Content.ReadAsStringAsync());
-            }
-            else if (result.StatusCode == HttpStatusCode.BadRequest)
-            {
-                var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
-                throw new GatewayException(error.Message);
-            }
-            throw new Exception(await result.Content.ReadAsStringAsync());
-        }
-
-        public async Task<PaymentFinalizeResponse> PaymentFinalizeAsync(PaymentFinalizeRequest paymentFinalizeRequest)
-        {
-            var client = _httpClientFactory.CreateClient("BankingSdkGatewayClient");
-
-            var stringContent = new StringContent(JsonSerializer.Serialize<PaymentFinalizeRequest>(paymentFinalizeRequest), Encoding.UTF8, "application/json");
-
-            var result = await client.PostAsync("pis/payment/finalize", stringContent);
-
-            if (result.IsSuccessStatusCode)
-            {
-                return JsonSerializer.Deserialize<PaymentFinalizeResponse>(await result.Content.ReadAsStringAsync());
-            }
-            else if (result.StatusCode == HttpStatusCode.BadRequest)
-            {
-                var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
-                throw new GatewayException(error.Message);
-            }
-            throw new Exception(await result.Content.ReadAsStringAsync());
-        }
-
-        public async Task<PaymentStatusResponse> PaymentStatusAsync(PaymentStatusRequest paymentStatusRequest)
-        {
-            var client = _httpClientFactory.CreateClient("BankingSdkGatewayClient");
-
-            var stringContent = new StringContent(JsonSerializer.Serialize<PaymentStatusRequest>(paymentStatusRequest), Encoding.UTF8, "application/json");
-
-            var result = await client.PostAsync("pis/payment", stringContent);
-
-            if (result.IsSuccessStatusCode)
-            {
-                return JsonSerializer.Deserialize<PaymentStatusResponse>(await result.Content.ReadAsStringAsync());
-            }
-            else if (result.StatusCode == HttpStatusCode.BadRequest)
-            {
-                var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
-                throw new GatewayException(error.Message);
-            }
-            throw new Exception(await result.Content.ReadAsStringAsync());
-        }
+        #region AIS-TRANSACTIONS
 
         public async Task<BalanceResponse> GetBalancesAsync(string accountId, BalanceRequest balanceRequest)
         {
@@ -412,6 +376,63 @@ namespace Exthand.GatewayClient
             throw new Exception(await result.Content.ReadAsStringAsync());
         }
 
+        #endregion
+
+        #region USER
+
+        /// <summary>
+        /// Gets the content of the latest Terms & Conditions, Pricvacy Notice and their Version number.
+        /// </summary>
+        /// <returns>TermsDTO object</returns>
+        public async Task<TermsDTO> GetTCAsync()
+        {
+            var client = _httpClientFactory.CreateClient("BankingSdkGatewayClient");
+            var result = await client.GetAsync("ais/gw/tc/latest");
+
+            if (result.IsSuccessStatusCode)
+            {
+                return JsonSerializer.Deserialize<TermsDTO>(await result.Content.ReadAsStringAsync());
+            }
+            else if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
+                throw new GatewayException(error.Message);
+            }
+
+            throw new Exception(await result.Content.ReadAsStringAsync());
+        }
+
+        /// <summary>
+        /// Get the latest version number of the TC & Privacy accepted by the given user.
+        /// </summary>
+        /// <param name="psuId">Your internal id of the user (PSU)</param>
+        /// <returns>TermsValidatedDTO object</returns>
+        public async Task<TermsValidated> GetTCLatestAsync(string psuId)
+        {
+            TermsValidated termsValidatedDTO = new()
+            {
+                psuId = psuId,
+                Version = -1
+            };
+
+            if (string.IsNullOrEmpty(psuId))
+                return termsValidatedDTO;
+
+            var client = _httpClientFactory.CreateClient("BankingSdkGatewayClient");
+            var result = await client.GetAsync("ais/gw/tc/latest/" + psuId);
+
+            if (result.IsSuccessStatusCode)
+            {
+                return JsonSerializer.Deserialize<TermsValidated>(await result.Content.ReadAsStringAsync());
+            }
+            else if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
+                throw new GatewayException(error.Message);
+            }
+
+            throw new Exception(await result.Content.ReadAsStringAsync());
+        }
 
         /// <summary>
         /// Creates a new user on the Gateway
@@ -437,6 +458,8 @@ namespace Exthand.GatewayClient
 
         }
 
+
+        #endregion
 
 
     }

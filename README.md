@@ -61,5 +61,71 @@ Normal case, action property should be == "OK", then you have to store the userC
 You will need userContext for all operations, it's __important__ to store it attached to your user and be able to provide it to E/G.
 
 
+### 2. Payment Initiation (PIS)
+
+Payment initiation is a four step process:
+* You get the bank connector behavior by calling GetBankPaymentAccessOptionsAsync
+* You initiate the payment and redirect your PSU to his bank for signing the payment.
+* You call the finalize method when you get called back by the bank.
+* Later, you call the status method to get a finalized status of your payment (executed, canceled, etc).
+
+#### Call GetBankPaymentAccessOptionsAsync
+
+@karol 
+
+#### Call PaymentInitiateAsync
+
+This call needs a [PaymentInitRequest](https://github.com/exthand/Exthand.Gateway/blob/master/Models/PaymentInitRequest.cs) object.
+You can fill it in like this sample code:
+```C# 
+PaymentInitRequest paymentInitRequest = new()
+
+            {
+                connectorId = connectorId,
+                userContext = userContext,
+                tppContext = new TppContext()
+                {
+                    TppId = _options.TPPName,
+                    App = _options.AppName,
+                    Flow = flow.Id.ToString()
+                },
+                paymentInitiationRequest = new PaymentInitiationRequest()
+                {
+                    amount = payment.Amount,
+                    currency = "EUR",
+                    recipient = new RecipientInfo()
+                    {
+                        iban = payment.IBAN.BankAccount,
+                        name = payment.Person.FirstName + " " + payment.Person.LastName
+                    },
+                    debtor = new DebtorInfo()
+                    {
+                        currency = "EUR",
+                        iban = debtorIbanAccount,
+                        name = payment.CounterpartyName,
+                        email = payment.ToEmail
+                    },
+                    remittanceInformationUnstructured = payment.Remittance,
+                    endToEndId = flow.Id.ToString().Replace("-", ""),
+                    flowId = flow.Id.ToString(),
+                    redirectUrl = _options.RedirectURL + redirectURL,
+                    psuIp = IP,
+                    requestedExecutionDate = DateTime.UtcNow
+                }
+            };
+```
+
+
+
+
+
+
+
+#### Call PaymentFinalizeAsync
+
+
+
+#### Call PaymentStatusAsync
+
 
 
