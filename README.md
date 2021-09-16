@@ -4,7 +4,7 @@ Client library to use Exthand:Gateway and connect to +1300 banks worldwide.
 ## How to get started.
 
 Company website: https://www.exthand.com
-
+Nuget Paackage of this repo: https://www.nuget.org/packages/Exthand.Gateway
 
 ### 1. Create first an account.
 
@@ -35,5 +35,27 @@ As simple as that!
 
 The day you get your own open banking license, you have to change the configuration file the BankingSDK Docker.
 It will then be able to directly connect to banks without going throught the Exthand:Gateway anymore.
+
+
+## How to start using the Exthand:Gateway with this nuget package.
+
+### 1. Register a user.
+
+Before being able to get transactions or initiate payement, you have to send to the Exthand:Gateway (E:G) information about the your user (PSU).
+For PIS, an email address or cell phone number is sufficient.
+For AIS, we require first name, last name, date of birth, email address and version of the Terms and Conditions accepted by the PSU.
+
+#### Call GetTCAsync (AIS only)
+
+Retrieves the latest version of the Terms and Conditions and Privacy Notice.
+If doing AIS, you have to show or provide a link those two files, and collect the consent (click on checkbox). The consent means: Me, as a PSU, I accept Exthand shares my banking data with __your company__.
+If doing PIS, forget this, consent is not required.
+
+Once you get the consent of the PSU, you have to register him on E:G.
+
+#### Call CreateUserAsync
+
+See above to know how much data you have to provide to this method.
+This will return a [UserRegisterResponse]https://github.com/exthand/Exthand.Gateway/blob/master/Models/UserRegisterResponse.cs object.
 
 
