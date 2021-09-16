@@ -81,18 +81,18 @@ You can fill it in like this sample code:
 PaymentInitRequest paymentInitRequest = new()
 
             {
-                connectorId = connectorId,
-                userContext = userContext,
+                connectorId = 1, // Calls ING in BELGIUM
+                userContext = userContext, // You do remember this one ;)
                 tppContext = new TppContext()
                 {
-                    TppId = _options.TPPName,
-                    App = _options.AppName,
-                    Flow = flow.Id.ToString()
+                    TppId = _options.TPPName, // Your customer name.
+                    App = _options.AppName,   // Your app name.
+                    Flow = flow.Id.ToString() // An unique identifier of the flow in your system.
                 },
                 paymentInitiationRequest = new PaymentInitiationRequest()
                 {
-                    amount = payment.Amount,
-                    currency = "EUR",
+                    amount = payment.Amount,  // Amount to be paid.
+                    currency = "EUR",         // Currency
                     recipient = new RecipientInfo()
                     {
                         iban = payment.IBAN.BankAccount,
@@ -115,9 +115,7 @@ PaymentInitRequest paymentInitRequest = new()
             };
 ```
 
-
-
-
+Once the call is executed, you get [PaymentInitResponse](https://github.com/exthand/Exthand.Gateway/blob/master/Models/PaymentInitResponse.cs) object.
 
 
 
