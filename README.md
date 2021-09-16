@@ -95,7 +95,7 @@ PaymentInitRequest paymentInitRequest = new()
                     currency = "EUR",         // Currency
                     recipient = new RecipientInfo()
                     {
-                        iban = payment.IBAN.BankAccount,
+                        iban = payment.IBAN.BankAccount,   
                         name = payment.Person.FirstName + " " + payment.Person.LastName
                     },
                     debtor = new DebtorInfo()
@@ -105,12 +105,12 @@ PaymentInitRequest paymentInitRequest = new()
                         name = payment.CounterpartyName,
                         email = payment.ToEmail
                     },
-                    remittanceInformationUnstructured = payment.Remittance,
-                    endToEndId = flow.Id.ToString().Replace("-", ""),
-                    flowId = flow.Id.ToString(),
-                    redirectUrl = _options.RedirectURL + redirectURL,
-                    psuIp = IP,
-                    requestedExecutionDate = DateTime.UtcNow
+                    remittanceInformationUnstructured = payment.Remittance,  // Remittance information (MAX 140 CHAR)
+                    endToEndId = flow.Id.ToString().Replace("-", ""),        // Unique identifier for this transaction (sent to the bank)
+                    flowId = flow.Id.ToString(),                             // Unique identifier for this transaction.
+                    redirectUrl = _options.RedirectURL + redirectURL,        // Your redirect URL
+                    psuIp = IP,                                              // The IP Address (IPv4, IPv6) of the PSU
+                    requestedExecutionDate = DateTime.UtcNow                 // Requested payment date.
                 }
             };
 ```
@@ -143,11 +143,44 @@ Value should be REDIRECT, and redirect url can be found in ```dataString``` prop
 ```
 
 
+#### Calls to Finalize PaymentFinalizeAsync
 
+This call is executed to finalize the payment process.
+You have to execute it when your redirect URL is called back after the PSU signed the payment on the bank's app or website.
 
-#### Call PaymentFinalizeAsync
+You should first call FindFlowIdAsync, give it the QueryString and get back your flowId.
 
+Once you have you flowId, call the PaymentFinalizeAsync method with a [PaymentFinalizeRequest](https://github.com/exthand/Exthand.Gateway/blob/master/Models/PaymentFinalizeRequest.cs).
 
+```C#
+            PaymentFinalizeRequest paymentFinalizeRequest = new PaymentFinalizeRequest()
+            {
+                flow = flow.ResponseInitFlowContext, // Pay attention to the fact we are speaking now about FlowContext and not Flow's ID.
+                tppContext = new()
+                {
+                    TppId = _options.TPPName,
+                    App = _options.AppName,
+                    Flow = flow.Id.ToString()
+                },
+                userContext = flow.UserContext,
+                dataString = queryString  // The querystring you sent to FindFlowIdAsync.
+            };
+```
+
+The [PaymentFinalizeResponse](https://github.com/exthand/Exthand.Gateway/blob/master/Models/PaymentFinalizeResponse.cs) object will be returned.
+The ```resultStatus``` property will contain a result code based on [PaymentStatusISO20022](https://github.com/exthand/Exthand.Gateway/blob/master/Models/PaymentStatusISO20022.cs).
+You can handle that property in a way like this.
+
+```C#
+            switch ((PaymentStatusISO20022)flow.ResponsePaymentStatus)
+            {
+                case PaymentStatusISO20022.ACSC:
+                case PaymentStatusISO20022.ACSP:
+                    // Payment accepted.
+                    Payment payment = await _paymentService.SetPaidAsync(flow.PaymentId.Value);
+                    return RedirectToPage("/debtor/ithankyou");
+            }
+```
 
 #### Call PaymentStatusAsync
 
