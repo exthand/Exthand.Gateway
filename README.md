@@ -76,6 +76,9 @@ Payment initiation is a four step process:
 #### Call PaymentInitiateAsync
 
 This call needs a [PaymentInitRequest](https://github.com/exthand/Exthand.Gateway/blob/master/Models/PaymentInitRequest.cs) object.
+
+You'll have to create a Flow object on our side. That Flow should have a unique identifier. You'll use the Flow id in all calls (init/finalize) which arelinked together.
+
 You can fill it in like this sample code:
 ```C# 
 PaymentInitRequest paymentInitRequest = new()
@@ -85,7 +88,7 @@ PaymentInitRequest paymentInitRequest = new()
                 userContext = userContext, // You do remember this one ;)
                 tppContext = new TppContext() 
                 {
-                    TppId = _options.TPPName, // Your customer name.
+                    TppId = _options.TPPName, // Your name.
                     App = _options.AppName,   // Your app name.
                     Flow = flow.Id.ToString() // An unique identifier of the flow in your system.
                 },
@@ -183,6 +186,13 @@ You can handle that property in a way like this.
 ```
 
 #### Call PaymentStatusAsync
+
+This call allows you to get the latests status of a payment. Most of the time, status received in the Finalize call are the correct and final ones, butnot always...  ;)
+Just call the method with the [PaymentStatusRequest](https://github.com/exthand/Exthand.Gateway/blob/master/Models/PaymentStatusRequest.cs) initialized.
+
+
+You'll get an answer object [PaymentStatusResponse](https://github.com/exthand/Exthand.Gateway/blob/master/Models/PaymentStatusResponse.cs). Structure is similar to the one you receive when you call the FinalizeAsync method.
+
 
 
 
