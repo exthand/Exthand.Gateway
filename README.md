@@ -6,23 +6,23 @@ Client library to use Exthand:Gateway and connect to +1300 banks worldwide.
 Company website: https://www.exthand.com
 Nuget Paackage of this repo: https://www.nuget.org/packages/Exthand.Gateway
 
-### 1. Create first an account.
+### 1. First create an account.
 
-Go to  https://developer.bankingsdk.com and register your self and your company.
+Go to  https://developer.bankingsdk.com and register yourself and your company.
 Create an application, get the application key and secret.
 Store the secret in a safe place.
 Send us ( support at exthand.com) your application key and company key. We'll provide you a license key.
 
-You'll be able from there to debug in real time your sandbox calls to get bank statements or initiate payments.
-In the documentation part of the website, you'll find the latest PDF Documentation file, read it carefully and mainly chapter 6.
+From there, you'll be able to debug your sandbox calls in real time, to get bank statements or initiate payments.
+In the documentation part of the website, you'll find the latest PDF Documentation file. Read it carefully, mainly chapter 6.
 
 
 ### 2. BankingSDK Docker.
 
-To use Exthand:Gateway to connect to banks, you also have to install a Docker container in your own cloud infrastrucutre.
+To use Exthand:Gateway, to connect to banks, you also have to install a Docker container in your own cloud infrastrucutre.
 Docker container might be found here: https://hub.docker.com/r/bankingsdk/bankingsdkdockerapi/tags?page=1&ordering=last_updated
 
-You install it first (check PDF Documentation file).
+You have to install it first (check PDF Documentation file).
 Then, use this nuget to call the Docker and get access to bank APIs.
 
 
@@ -33,7 +33,7 @@ Your BankingSDK Docker instance will call the Exthand:Gateway API and transfer y
 Banks does answer to the Exthand:Gateway which sends back the response to your Docker.
 As simple as that!
 
-The day you get your own open banking license, you have to change the configuration file the BankingSDK Docker.
+The day you get your own open banking license, you have to change the configuration file in the BankingSDK Docker.
 It will then be able to directly connect to banks without going throught the Exthand:Gateway anymore.
 
 
@@ -42,13 +42,13 @@ It will then be able to directly connect to banks without going throught the Ext
 ### 1. Register a user.
 
 Before being able to get transactions or initiate payement, you have to send to the Exthand:Gateway (E:G) information about the your user (PSU).
-For PIS, an email address or cell phone number is sufficient.
+For PIS, your internal PSU ID and an email address or cell phone number is sufficient.
 For AIS, we require first name, last name, date of birth, email address and version of the Terms and Conditions accepted by the PSU.
 
 #### Call GetTCAsync (AIS only)
 
 Retrieves the latest version of the Terms and Conditions and Privacy Notice.
-If doing AIS, you have to show or provide a link those two files, and collect the consent (click on checkbox). The consent means: Me, as a PSU, I accept Exthand shares my banking data with __your company__.
+If doing AIS, you have to show or provide a link to those two files, and collect the consent (click on checkbox). The consent means: Me, as a PSU, I accept Exthand shares my banking data with __your company__.
 If doing PIS, forget this, consent is not required.
 
 Once you get the consent of the PSU, you have to register him on E:G.
@@ -83,7 +83,7 @@ PaymentInitRequest paymentInitRequest = new()
             {
                 connectorId = 1, // Calls ING in BELGIUM
                 userContext = userContext, // You do remember this one ;)
-                tppContext = new TppContext()
+                tppContext = new TppContext() 
                 {
                     TppId = _options.TPPName, // Your customer name.
                     App = _options.AppName,   // Your app name.
@@ -106,7 +106,7 @@ PaymentInitRequest paymentInitRequest = new()
                         email = payment.ToEmail
                     },
                     remittanceInformationUnstructured = payment.Remittance,  // Remittance information (MAX 140 CHAR)
-                    endToEndId = flow.Id.ToString().Replace("-", ""),        // Unique identifier for this transaction (sent to the bank)
+                    endToEndId = flow.Id.ToString().Replace("-", ""),        // Unique identifier for this transaction (sent to the bank, MAX 35 CHAR)
                     flowId = flow.Id.ToString(),                             // Unique identifier for this transaction.
                     redirectUrl = _options.RedirectURL + redirectURL,        // Your redirect URL
                     psuIp = IP,                                              // The IP Address (IPv4, IPv6) of the PSU
@@ -115,7 +115,7 @@ PaymentInitRequest paymentInitRequest = new()
             };
 ```
 
-Once the call is executed, you get [PaymentInitResponse](https://github.com/exthand/Exthand.Gateway/blob/master/Models/PaymentInitResponse.cs) object.
+Once the call is executed, you get [PaymentInitResponse](https://github.com/exthand/Exthand.Gateway/blob/master/Models/PaymentInitResponse.cs) object. Save the FlowContext included in the result. It will be needed in the next step.
 In that response, the [ResultStatus](https://github.com/exthand/Exthand.Gateway/blob/master/Models/ResultStatus.cs) indicates if the payment can be initiated.
 Value should be REDIRECT, and redirect url can be found in ```dataString``` property like in the following example:
 
@@ -150,7 +150,7 @@ You have to execute it when your redirect URL is called back after the PSU signe
 
 You should first call FindFlowIdAsync, give it the QueryString and get back your flowId.
 
-Once you have you flowId, call the PaymentFinalizeAsync method with a [PaymentFinalizeRequest](https://github.com/exthand/Exthand.Gateway/blob/master/Models/PaymentFinalizeRequest.cs).
+Once you have you flowId you can recover previously saved FlowContex and call the PaymentFinalizeAsync method with a [PaymentFinalizeRequest](https://github.com/exthand/Exthand.Gateway/blob/master/Models/PaymentFinalizeRequest.cs).
 
 ```C#
             PaymentFinalizeRequest paymentFinalizeRequest = new PaymentFinalizeRequest()
