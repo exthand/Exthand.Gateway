@@ -152,6 +152,10 @@ This call is executed to finalize the payment process.
 You have to execute it when your redirect URL is called back after the PSU signed the payment on the bank's app or website.
 
 You should first call FindFlowIdAsync, give it the QueryString and get back your flowId.
+```C#
+            string query = Request.QueryString.ToString();
+            string flowId = await FindFlowIdAsync(queryString);
+```
 
 Once you have you flowId you can recover previously saved FlowContex and call the PaymentFinalizeAsync method with a [PaymentFinalizeRequest](https://github.com/exthand/Exthand.Gateway/blob/master/Models/PaymentFinalizeRequest.cs).
 
