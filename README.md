@@ -170,7 +170,7 @@ Once you have you flowId you can recover previously saved FlowContex and call th
                     Flow = flow.Id.ToString()
                 },
                 userContext = flow.UserContext,
-                dataString = queryString  // The querystring you sent to FindFlowIdAsync.
+                dataString = query  // The querystring you sent to FindFlowIdAsync.
             };
 ```
 
