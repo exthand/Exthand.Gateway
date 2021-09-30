@@ -71,7 +71,7 @@ Payment initiation is a four step process:
 
 #### Call GetBankPaymentAccessOptionsAsync
 
-@karol 
+This call returns information, that help build the payment request object for specific connector. 
 
 #### Call PaymentInitiateAsync
 
