@@ -17,6 +17,7 @@
     <PackageTags>psd2 openbanking exthand</PackageTags>
     <AssemblyVersion>2.4.2.0</AssemblyVersion>
     <FileVersion>2.4.2.0</FileVersion>
+    <Version>2.4.2</Version>
   </PropertyGroup>
 
   <ItemGroup>
