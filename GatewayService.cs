@@ -44,7 +44,7 @@ namespace Exthand.GatewayClient
             else if (result.StatusCode == HttpStatusCode.BadRequest)
             {
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
-                throw new GatewayException(error.Message);
+                throw new GatewayException(error);
             }
 
             throw new Exception(await result.Content.ReadAsStringAsync());
@@ -63,7 +63,7 @@ namespace Exthand.GatewayClient
             else if (result.StatusCode == HttpStatusCode.BadRequest)
             {
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
-                throw new GatewayException(error.Message);
+                throw new GatewayException(error);
             }
             throw new Exception(await result.Content.ReadAsStringAsync());
         }
@@ -84,7 +84,7 @@ namespace Exthand.GatewayClient
             else if (result.StatusCode == HttpStatusCode.BadRequest)
             {
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
-                throw new GatewayException(error.Message);
+                throw new GatewayException(error);
             }
             throw new Exception(await result.Content.ReadAsStringAsync());
         }
@@ -104,7 +104,7 @@ namespace Exthand.GatewayClient
             else if (result.StatusCode == HttpStatusCode.BadRequest)
             {
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
-                throw new GatewayException(error.Message);
+                throw new GatewayException(error);
             }
             throw new Exception(await result.Content.ReadAsStringAsync());
         }
@@ -124,7 +124,7 @@ namespace Exthand.GatewayClient
             else if (result.StatusCode == HttpStatusCode.BadRequest)
             {
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
-                throw new GatewayException(error.Message);
+                throw new GatewayException(error);
             }
             throw new Exception(await result.Content.ReadAsStringAsync());
         }
@@ -144,7 +144,7 @@ namespace Exthand.GatewayClient
             else if (result.StatusCode == HttpStatusCode.BadRequest)
             {
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
-                throw new GatewayException(error.Message);
+                throw new GatewayException(error);
             }
             throw new Exception(await result.Content.ReadAsStringAsync());
         }
@@ -166,7 +166,7 @@ namespace Exthand.GatewayClient
             else if (result.StatusCode == HttpStatusCode.BadRequest)
             {
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
-                throw new GatewayException(error.Message);
+                throw new GatewayException(error);
             }
             throw new Exception(await result.Content.ReadAsStringAsync());
         }
@@ -192,7 +192,7 @@ namespace Exthand.GatewayClient
             else if (result.StatusCode == HttpStatusCode.BadRequest)
             {
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
-                throw new GatewayException(error.Message);
+                throw new GatewayException(error);
             }
             throw new Exception(await result.Content.ReadAsStringAsync());
         }
@@ -217,7 +217,7 @@ namespace Exthand.GatewayClient
             else if (result.StatusCode == HttpStatusCode.BadRequest)
             {
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
-                throw new GatewayException(error.Message);
+                throw new GatewayException(error);
             }
             throw new Exception(await result.Content.ReadAsStringAsync());
         }
@@ -242,7 +242,7 @@ namespace Exthand.GatewayClient
             else if (result.StatusCode == HttpStatusCode.BadRequest)
             {
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
-                throw new GatewayException(error.Message);
+                throw new GatewayException(error);
             }
             throw new Exception(await result.Content.ReadAsStringAsync());
         }
@@ -267,7 +267,7 @@ namespace Exthand.GatewayClient
             else if (result.StatusCode == HttpStatusCode.BadRequest)
             {
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
-                throw new GatewayException(error.Message);
+                throw new GatewayException(error);
             }
             throw new Exception(await result.Content.ReadAsStringAsync());
         }
@@ -287,7 +287,7 @@ namespace Exthand.GatewayClient
             else if (result.StatusCode == HttpStatusCode.BadRequest)
             {
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
-                throw new GatewayException(error.Message);
+                throw new GatewayException(error);
             }
             throw new Exception(await result.Content.ReadAsStringAsync());
         }
@@ -311,7 +311,7 @@ namespace Exthand.GatewayClient
             else if (result.StatusCode == HttpStatusCode.BadRequest)
             {
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
-                throw new GatewayException(error.Message);
+                throw new GatewayException(error);
             }
             throw new Exception(await result.Content.ReadAsStringAsync());
         }
@@ -331,7 +331,7 @@ namespace Exthand.GatewayClient
             else if (result.StatusCode == HttpStatusCode.BadRequest)
             {
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
-                throw new GatewayException(error.Message);
+                throw new GatewayException(error);
             }
             throw new Exception(await result.Content.ReadAsStringAsync());
         }
@@ -351,7 +351,7 @@ namespace Exthand.GatewayClient
             else if (result.StatusCode == HttpStatusCode.BadRequest)
             {
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
-                throw new GatewayException(error.Message);
+                throw new GatewayException(error);
             }
             throw new Exception(await result.Content.ReadAsStringAsync());
         }
@@ -371,7 +371,7 @@ namespace Exthand.GatewayClient
             else if (result.StatusCode == HttpStatusCode.BadRequest)
             {
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
-                throw new GatewayException(error.Message);
+                throw new GatewayException(error);
             }
             throw new Exception(await result.Content.ReadAsStringAsync());
         }
@@ -396,7 +396,7 @@ namespace Exthand.GatewayClient
             else if (result.StatusCode == HttpStatusCode.BadRequest)
             {
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
-                throw new GatewayException(error.Message);
+                throw new GatewayException(error);
             }
 
             throw new Exception(await result.Content.ReadAsStringAsync());
@@ -428,7 +428,7 @@ namespace Exthand.GatewayClient
             else if (result.StatusCode == HttpStatusCode.BadRequest)
             {
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
-                throw new GatewayException(error.Message);
+                throw new GatewayException(error);
             }
 
             throw new Exception(await result.Content.ReadAsStringAsync());
@@ -452,7 +452,7 @@ namespace Exthand.GatewayClient
             else if (result.StatusCode == HttpStatusCode.BadRequest)
             {
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
-                throw new GatewayException(error.Message);
+                throw new GatewayException(error);
             }
             throw new Exception(await result.Content.ReadAsStringAsync());
 

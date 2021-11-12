@@ -16,6 +16,12 @@ namespace Exthand.GatewayClient.Models
         [JsonPropertyName("message")]
         public string Message { get; set; }
 
+        [JsonPropertyName("innerException")]
+        public string InnerException { get; set; }
+
+        [JsonPropertyName("statusCode")]
+        public int? StatusCode { get; set; }
+
         [JsonPropertyName("userContext")] public string UserContext { get; set; }
         [JsonPropertyName("log")] public string Log { get; set; }
     }
