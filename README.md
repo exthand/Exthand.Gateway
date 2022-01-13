@@ -181,11 +181,35 @@ You can handle that property in a way like this.
 ```C#
             switch ((PaymentStatusISO20022)flow.ResponsePaymentStatus)
             {
-                case PaymentStatusISO20022.ACSC:
-                case PaymentStatusISO20022.ACSP:
-                    // Payment accepted.
-                    Payment payment = await _paymentService.SetPaidAsync(flow.PaymentId.Value);
-                    return RedirectToPage("/debtor/ithankyou");
+                case ResultStatus.UNKNOW:
+                    payment = await _paymentService.SetPendingAsync(flow.PaymentId.Value);
+                    // As we don't know the final status, we set it as pending in our system.
+                    return RedirectToAction("PayPending");
+                case ResultStatus.DONE:
+                    switch ((PaymentStatusISO20022)flow.ResponsePaymentStatus)
+                    {
+                        case PaymentStatusISO20022.ACCC:
+                            // Payment accepted.
+                            payment = await _paymentService.SetPaidAsync(flow.PaymentId.Value);
+                            return RedirectToAction("ithankyou");
+                        case PaymentStatusISO20022.RJCT:
+                        case PaymentStatusISO20022.BLCK:
+                        case PaymentStatusISO20022.CANC:
+                            // Payment has been refused.
+                            payment = await _paymentService.SetRejectedAsync(flow.PaymentId.Value);
+                            return RedirectToAction("PayRejected");
+                        default:
+                            // Payment status is unknow. Should be good, best is to call PaymentStatusAsync later. 
+                            payment = await _paymentService.SetPendingAsync(flow.PaymentId.Value);
+                            return RedirectToAction("PayPending");
+                    }
+                    break;
+                case ResultStatus.REDIRECT:
+                    // One more redirection requested by the bank, let's play.
+                    return Redirect(flow.ResponseFinalizeDataString);
+                case ResultStatus.ERROR:
+                    // Handle the error here.
+                    break;
             }
 ```
 

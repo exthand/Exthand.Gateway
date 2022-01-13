@@ -25,18 +25,7 @@ namespace Exthand.GatewayClient.Models
         public string creditorName { get; set; }
         public BankingAccount creditor { get; set; }
         public BankingAccountInstructedAmount amount { get; set; }
-        public PaymentStatusISO20022 status
-        {
-            get
-            {
-                if (Enum.TryParse<PaymentStatusISO20022>(statusCodeRaw, out var value))
-                {
-                    return value;
-                }
-
-                return PaymentStatusISO20022.UNKN;
-            }
-        }
+        public PaymentStatusISO20022 status { get; set; }
         public string statusCodeRaw { get; set; }
         public string endToEndIdentification { get; set; }
     }
