@@ -23,7 +23,6 @@ namespace Exthand.GatewayClient.Interface
         public Task<TermsValidated> GetTCLatestAsync(string psuId);
         Task<TransactionResponse> GetTransactionsAsync(string accountId, TransactionRequest transactionRequest);
         Task<TransactionResponse> GetTransactionsNextAsync(string accountId, TransactionPagingRequest transactionRequest);
-        Task<TransactionResponse> GetTransactionsPreviousAsync(string accountId, TransactionPagingRequest transactionRequest);
         Task<PaymentFinalizeResponse> PaymentFinalizeAsync(PaymentFinalizeRequest paymentFinalizeRequest);
         Task<PaymentInitResponse> PaymentInitiateAsync(PaymentInitRequest paymentInitRequest);
         Task<PaymentStatusResponse> PaymentStatusAsync(PaymentStatusRequest paymentStatusRequest);

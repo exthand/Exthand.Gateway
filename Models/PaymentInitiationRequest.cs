@@ -19,6 +19,19 @@ namespace Exthand.GatewayClient.Models
     }
 
 
+    public enum PaymentProduct
+    {
+        Domestic,
+        SEPA,
+        CrossBorder
+    }
+
+    public enum PaymentPriority
+    {
+        Normal,
+        Instant
+    }
+
     public class PaymentInitiationRequest
     {
         [Required]
@@ -39,7 +52,12 @@ namespace Exthand.GatewayClient.Models
         public string psuLastLoggedTime {get;set;}
         public string psuReferer {get;set;}
         public string psuUserAgent {get;set;}
-        
+
+        [Required]
+        public PaymentProduct PaymentProduct { get; set; }
+
+        public PaymentPriority PaymentPriority { get; set; }
+
         [Required]
         public string redirectUrl { get; set; }
         [Required]

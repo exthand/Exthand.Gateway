@@ -35,7 +35,7 @@ namespace Exthand.GatewayClient
         public async Task<IEnumerable<Bank>> GetBanksAsync(string countryCode)
         {
             var client = _httpClientFactory.CreateClient("BankingSdkGatewayClient");
-            var result = await client.GetAsync("ais/banks?countryCode=" + countryCode);
+            var result = await client.GetAsync("ob/banks?countryCode=" + countryCode);
 
             if (result.IsSuccessStatusCode)
             {
@@ -54,7 +54,7 @@ namespace Exthand.GatewayClient
         public async Task<string> FindFlowIdAsync(string queryString)
         {
             var client = _httpClientFactory.CreateClient("BankingSdkGatewayClient");
-            var result = await client.GetAsync("ais/access/findFlowId?queryString=" + HttpUtility.UrlEncode(queryString));
+            var result = await client.GetAsync("ob/findFlowId?queryString=" + HttpUtility.UrlEncode(queryString));
 
             if (result.IsSuccessStatusCode)
             {
@@ -75,7 +75,7 @@ namespace Exthand.GatewayClient
         public async Task<BankPaymentAccessOption> GetBankPaymentAccessOptionsAsync(int connectorId)
         {
             var client = _httpClientFactory.CreateClient("BankingSdkGatewayClient");
-            var result = await client.GetAsync("pis/payment/options/" + connectorId.ToString());
+            var result = await client.GetAsync("ob/pis/payments/options/{connectorId}" + connectorId.ToString());
 
             if (result.IsSuccessStatusCode)
             {
@@ -95,7 +95,7 @@ namespace Exthand.GatewayClient
 
             var stringContent = new StringContent(JsonSerializer.Serialize<PaymentInitRequest>(paymentInitRequest), Encoding.UTF8, "application/json");
 
-            var result = await client.PostAsync("pis/payment", stringContent);
+            var result = await client.PostAsync("ob/pis/payments", stringContent);
 
             if (result.IsSuccessStatusCode)
             {
@@ -115,7 +115,7 @@ namespace Exthand.GatewayClient
 
             var stringContent = new StringContent(JsonSerializer.Serialize<PaymentFinalizeRequest>(paymentFinalizeRequest), Encoding.UTF8, "application/json");
 
-            var result = await client.PostAsync("pis/payment/finalize", stringContent);
+            var result = await client.PutAsync("ob/pis/payments", stringContent);
 
             if (result.IsSuccessStatusCode)
             {
@@ -135,7 +135,7 @@ namespace Exthand.GatewayClient
 
             var stringContent = new StringContent(JsonSerializer.Serialize<PaymentStatusRequest>(paymentStatusRequest), Encoding.UTF8, "application/json");
 
-            var result = await client.PostAsync("pis/payment", stringContent);
+            var result = await client.PostAsync("ob/pis/payments/status", stringContent);
 
             if (result.IsSuccessStatusCode)
             {
@@ -157,7 +157,7 @@ namespace Exthand.GatewayClient
         public async Task<BankAccessOption> GetBankAccessOptionsAsync(int connectorId)
         {
             var client = _httpClientFactory.CreateClient("BankingSdkGatewayClient");
-            var result = await client.GetAsync("ais/access/option/" + connectorId.ToString());
+            var result = await client.GetAsync("ob/ais/access/options/" + connectorId.ToString());
 
             if (result.IsSuccessStatusCode)
             {
@@ -183,7 +183,7 @@ namespace Exthand.GatewayClient
 
             var stringContent = new StringContent(JsonSerializer.Serialize<BankAccessRequest>(bankAccessRequest), Encoding.UTF8, "application/json");
 
-            var result = await client.PostAsync("ais/access", stringContent);
+            var result = await client.PostAsync("ob/ais/access", stringContent);
 
             if (result.IsSuccessStatusCode)
             {
@@ -208,7 +208,7 @@ namespace Exthand.GatewayClient
 
             var stringContent = new StringContent(JsonSerializer.Serialize<BankAccessRequestFinalize>(bankAccessRequestFinalize), Encoding.UTF8, "application/json");
 
-            var result = await client.PostAsync("ais/access/finalize", stringContent);
+            var result = await client.PutAsync("ob/ais/access", stringContent);
 
             if (result.IsSuccessStatusCode)
             {
@@ -233,7 +233,7 @@ namespace Exthand.GatewayClient
 
             var stringContent = new StringContent(JsonSerializer.Serialize<DeleteConsentRequest>(deleteConsentRequest), Encoding.UTF8, "application/json");
 
-            var result = await client.PostAsync("/ais/access/deleteconsent", stringContent);
+            var result = await client.PutAsync("ob/ais/consents/delete", stringContent);
 
             if (result.IsSuccessStatusCode)
             {
@@ -258,7 +258,7 @@ namespace Exthand.GatewayClient
 
             var stringContent = new StringContent(JsonSerializer.Serialize<DeleteAccountRequest>(deleteAccountRequest), Encoding.UTF8, "application/json");
 
-            var result = await client.PostAsync("ais/access/deleteaccount", stringContent);
+            var result = await client.PutAsync("ob/ais/accounts/delete", stringContent);
 
             if (result.IsSuccessStatusCode)
             {
@@ -278,7 +278,7 @@ namespace Exthand.GatewayClient
 
             var stringContent = new StringContent(JsonSerializer.Serialize<BankAccountsRequest>(bankAccountsRequest), Encoding.UTF8, "application/json");
 
-            var result = await client.PostAsync("ais/accounts", stringContent);
+            var result = await client.PostAsync("ob/ais/accounts", stringContent);
 
             if (result.IsSuccessStatusCode)
             {
@@ -302,7 +302,7 @@ namespace Exthand.GatewayClient
 
             var stringContent = new StringContent(JsonSerializer.Serialize<BalanceRequest>(balanceRequest), Encoding.UTF8, "application/json");
 
-            var result = await client.PostAsync($"ais/account{accountId}/balances", stringContent);
+            var result = await client.PostAsync($"ob/ais/accounts/{accountId}/balances", stringContent);
 
             if (result.IsSuccessStatusCode)
             {
@@ -322,7 +322,7 @@ namespace Exthand.GatewayClient
 
             var stringContent = new StringContent(JsonSerializer.Serialize<TransactionRequest>(transactionRequest), Encoding.UTF8, "application/json");
 
-            var result = await client.PostAsync($"ais/accounts/{accountId}/transactions", stringContent);
+            var result = await client.PostAsync($"ob/ais/accounts/{accountId}/transactions", stringContent);
 
             if (result.IsSuccessStatusCode)
             {
@@ -342,27 +342,7 @@ namespace Exthand.GatewayClient
 
             var stringContent = new StringContent(JsonSerializer.Serialize<TransactionPagingRequest>(transactionRequest), Encoding.UTF8, "application/json");
 
-            var result = await client.PostAsync($"ais/accounts/{accountId}/transactions/next", stringContent);
-
-            if (result.IsSuccessStatusCode)
-            {
-                return JsonSerializer.Deserialize<TransactionResponse>(await result.Content.ReadAsStringAsync());
-            }
-            else if (result.StatusCode == HttpStatusCode.BadRequest)
-            {
-                var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
-                throw new GatewayException(error);
-            }
-            throw new Exception(await result.Content.ReadAsStringAsync());
-        }
-
-        public async Task<TransactionResponse> GetTransactionsPreviousAsync(string accountId, TransactionPagingRequest transactionRequest)
-        {
-            var client = _httpClientFactory.CreateClient("BankingSdkGatewayClient");
-
-            var stringContent = new StringContent(JsonSerializer.Serialize<TransactionPagingRequest>(transactionRequest), Encoding.UTF8, "application/json");
-
-            var result = await client.PostAsync($"ais/accounts/{accountId}/transactions/previous", stringContent);
+            var result = await client.PostAsync($"ob/ais/accounts/{accountId}/transactions/next", stringContent);
 
             if (result.IsSuccessStatusCode)
             {
@@ -387,7 +367,7 @@ namespace Exthand.GatewayClient
         public async Task<TermsDTO> GetTCAsync()
         {
             var client = _httpClientFactory.CreateClient("BankingSdkGatewayClient");
-            var result = await client.GetAsync("ais/gw/tc/latest");
+            var result = await client.GetAsync("ob/gw/tc/latest");
 
             if (result.IsSuccessStatusCode)
             {
@@ -419,7 +399,7 @@ namespace Exthand.GatewayClient
                 return termsValidatedDTO;
 
             var client = _httpClientFactory.CreateClient("BankingSdkGatewayClient");
-            var result = await client.GetAsync("ais/gw/tc/latest/" + psuId);
+            var result = await client.GetAsync($"ob/gw/users/{psuId}/tc/latest" );
 
             if (result.IsSuccessStatusCode)
             {
@@ -443,7 +423,7 @@ namespace Exthand.GatewayClient
         {
             var client = _httpClientFactory.CreateClient("BankingSdkGatewayClient");
             var stringContent = new StringContent(JsonSerializer.Serialize<UserDTO>(userDTO), Encoding.UTF8, "application/json");
-            var result = await client.PostAsync("/ais/gw/user/register", stringContent);
+            var result = await client.PostAsync("ob/gw/users", stringContent);
 
             if (result.IsSuccessStatusCode)
             {
