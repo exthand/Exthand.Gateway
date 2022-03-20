@@ -1,0 +1,29 @@
+namespace BankingSDK.Common.Models
+{
+    public enum AccountSchemeType
+    {
+        CHID,
+        GS1G,
+        DUNS,
+        BANK,
+        TXID,
+        CUST,
+        EMPL,
+        OTHC,
+        DRLC,
+        SOSE,
+        ARNU,
+        CCPT,
+        OTHI,
+        COID,
+        SREN,
+        SRET,
+        NIDN,
+        OAUT,
+        CPAN,
+        BBAN,
+        IBAN,
+        BG,
+        PG
+    }
+}
