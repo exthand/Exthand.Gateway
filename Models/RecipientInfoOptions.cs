@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using BankingSDK.Common.Enums;
-using BankingSDK.Common.Models.Data;
 
-namespace BankingSDK.Common.Models
+namespace Exthand.GatewayClient.Models
 {
     public class RecipientInfoOptions
     {

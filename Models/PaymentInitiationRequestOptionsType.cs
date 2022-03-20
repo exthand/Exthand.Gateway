@@ -1,4 +1,4 @@
-namespace BankingSDK.Common.Enums
+namespace Exthand.GatewayClient.Models
 {
     public enum PaymentInitiationRequestOptionsType
     {

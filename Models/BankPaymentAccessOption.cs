@@ -9,58 +9,26 @@ namespace Exthand.GatewayClient.Models
 
     public class BankPaymentAccessOption
     {
-        public int debtorIban { get; set; }
+        public TransferOptions sepaCreditTransfers { get; set; } = new ();
+        public TransferOptions instantSepaCreditTransfers { get; set; } = new ();
+        public TransferOptions domesticTransfers { get; set; } = new();
+        public TransferOptions crossborderSepaCreditTransfers { get; set; } = new ();
+        public TransferOptions target2Payment { get; set; } = new ();
+    }
 
-        public SepaCreditTransfers sepaCreditTransfers { get; set; } = new SepaCreditTransfers();
-        public InstantSepaCreditTransfers instantSepaCreditTransfers { get; set; } = new InstantSepaCreditTransfers();
-        public CrossborderSepaCreditTransfers crossborderSepaCreditTransfers { get; set; } = new CrossborderSepaCreditTransfers();
-        public Target2Payment target2Payment { get; set; } = new Target2Payment();
+    public class TransferOptions
+    {
+        public SupportOptions singlePayments { get; set; } = new ();
+        public SupportOptions periodicPayments { get; set; } = new ();
+        public SupportOptions bulkPayments { get; set; } = new ();
+        public PaymentInitiationRequestOptions PaymentInitiationRequestOptions { get; set; } = new ();
         public List<AdditionalPropertyRequested> additionalPropertiesRequested { get; set; } = new List<AdditionalPropertyRequested>();
     }
 
-    public class SepaCreditTransfers
-    {
-        public SinglePayments singlePayments { get; set; } = new SinglePayments();
-        public PeriodicPayments periodicPayments { get; set; } = new PeriodicPayments();
-        public BulkPayments bulkPayments { get; set; } = new BulkPayments();
-
-    }
-
-    public class SinglePayments
+    public class SupportOptions
     {
         public bool supported { get; set; }
         public bool cancelSupported { get; set; }
-    }
-    public class PeriodicPayments
-    {
-        public bool supported { get; set; }
-        public bool cancelSupported { get; set; }
-    }
-    public class BulkPayments
-    {
-        public bool supported { get; set; }
-        public bool cancelSupported { get; set; }
-    }
-
-    public class InstantSepaCreditTransfers
-    {
-        public SinglePayments singlePayments { get; set; }
-        public PeriodicPayments periodicPayments { get; set; }
-        public BulkPayments bulkPayments { get; set; }
-    }
-
-    public class CrossborderSepaCreditTransfers
-    {
-        public SinglePayments singlePayments { get; set; }
-        public PeriodicPayments periodicPayments { get; set; }
-        public BulkPayments bulkPayments { get; set; }
-    }
-
-    public class Target2Payment
-    {
-        public SinglePayments singlePayments { get; set; }
-        public PeriodicPayments periodicPayments { get; set; }
-        public BulkPayments bulkPayments { get; set; }
     }
 
     public class AdditionalPropertyRequested

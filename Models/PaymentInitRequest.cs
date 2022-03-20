@@ -14,6 +14,5 @@ namespace Exthand.GatewayClient.Models
         public string userContext { get; set; }
         public PaymentInitiationRequest paymentInitiationRequest { get; set; } = new PaymentInitiationRequest();
         public TppContext tppContext { get; set; } = new TppContext();
-
     }
 }

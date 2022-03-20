@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using BankingSDK.Common.Enums;
 
-namespace BankingSDK.Common.Models
+namespace Exthand.GatewayClient.Models
 {
     public class PaymentInitiationRequestOptions
     {

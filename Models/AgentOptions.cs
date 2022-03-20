@@ -1,6 +1,4 @@
-using BankingSDK.Common.Enums;
-
-namespace BankingSDK.Common.Models
+namespace Exthand.GatewayClient.Models
 {
     public class AgentOptions
     {

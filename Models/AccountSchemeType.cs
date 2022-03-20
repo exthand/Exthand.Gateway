@@ -1,4 +1,4 @@
-namespace BankingSDK.Common.Models
+namespace Exthand.GatewayClient.Models
 {
     public enum AccountSchemeType
     {

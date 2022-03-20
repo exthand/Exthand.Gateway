@@ -47,7 +47,7 @@ namespace Exthand.GatewayClient
                 throw new GatewayException(error);
             }
 
-            throw new Exception(await result.Content.ReadAsStringAsync());
+            throw new Exception(result.StatusCode + " " + result.ReasonPhrase + " " + await result.Content.ReadAsStringAsync());
         }
 
 
@@ -65,7 +65,7 @@ namespace Exthand.GatewayClient
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
                 throw new GatewayException(error);
             }
-            throw new Exception(await result.Content.ReadAsStringAsync());
+            throw new Exception(result.StatusCode + " " + result.ReasonPhrase + " " + await result.Content.ReadAsStringAsync());
         }
 
         #endregion
@@ -75,7 +75,7 @@ namespace Exthand.GatewayClient
         public async Task<BankPaymentAccessOption> GetBankPaymentAccessOptionsAsync(int connectorId)
         {
             var client = _httpClientFactory.CreateClient("BankingSdkGatewayClient");
-            var result = await client.GetAsync("ob/pis/payments/options/{connectorId}" + connectorId.ToString());
+            var result = await client.GetAsync("ob/pis/payments/options/" + connectorId.ToString());
 
             if (result.IsSuccessStatusCode)
             {
@@ -86,7 +86,7 @@ namespace Exthand.GatewayClient
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
                 throw new GatewayException(error);
             }
-            throw new Exception(await result.Content.ReadAsStringAsync());
+            throw new Exception(result.StatusCode + " " + result.ReasonPhrase + " " + await result.Content.ReadAsStringAsync());
         }
 
         public async Task<PaymentInitResponse> PaymentInitiateAsync(PaymentInitRequest paymentInitRequest)
@@ -106,7 +106,7 @@ namespace Exthand.GatewayClient
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
                 throw new GatewayException(error);
             }
-            throw new Exception(await result.Content.ReadAsStringAsync());
+            throw new Exception(result.StatusCode + " " + result.ReasonPhrase + " " + await result.Content.ReadAsStringAsync());
         }
 
         public async Task<PaymentFinalizeResponse> PaymentFinalizeAsync(PaymentFinalizeRequest paymentFinalizeRequest)
@@ -126,7 +126,7 @@ namespace Exthand.GatewayClient
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
                 throw new GatewayException(error);
             }
-            throw new Exception(await result.Content.ReadAsStringAsync());
+            throw new Exception(result.StatusCode + " " + result.ReasonPhrase + " " + await result.Content.ReadAsStringAsync());
         }
 
         public async Task<PaymentStatusResponse> PaymentStatusAsync(PaymentStatusRequest paymentStatusRequest)
@@ -146,11 +146,11 @@ namespace Exthand.GatewayClient
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
                 throw new GatewayException(error);
             }
-            throw new Exception(await result.Content.ReadAsStringAsync());
+            throw new Exception(result.StatusCode + " " + result.ReasonPhrase + " " + await result.Content.ReadAsStringAsync());
         }
 
         #endregion
-
+        
         #region AIS-BANK-ACCESS
 
 
@@ -168,7 +168,7 @@ namespace Exthand.GatewayClient
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
                 throw new GatewayException(error);
             }
-            throw new Exception(await result.Content.ReadAsStringAsync());
+            throw new Exception(result.StatusCode + " " + result.ReasonPhrase + " " + await result.Content.ReadAsStringAsync());
         }
 
 
@@ -194,7 +194,7 @@ namespace Exthand.GatewayClient
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
                 throw new GatewayException(error);
             }
-            throw new Exception(await result.Content.ReadAsStringAsync());
+            throw new Exception(result.StatusCode + " " + result.ReasonPhrase + " " + await result.Content.ReadAsStringAsync());
         }
 
         /// <summary>
@@ -219,7 +219,7 @@ namespace Exthand.GatewayClient
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
                 throw new GatewayException(error);
             }
-            throw new Exception(await result.Content.ReadAsStringAsync());
+            throw new Exception(result.StatusCode + " " + result.ReasonPhrase + " " + await result.Content.ReadAsStringAsync());
         }
 
         /// <summary>
@@ -244,7 +244,7 @@ namespace Exthand.GatewayClient
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
                 throw new GatewayException(error);
             }
-            throw new Exception(await result.Content.ReadAsStringAsync());
+            throw new Exception(result.StatusCode + " " + result.ReasonPhrase + " " + await result.Content.ReadAsStringAsync());
         }
 
         /// <summary>
@@ -269,7 +269,7 @@ namespace Exthand.GatewayClient
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
                 throw new GatewayException(error);
             }
-            throw new Exception(await result.Content.ReadAsStringAsync());
+            throw new Exception(result.StatusCode + " " + result.ReasonPhrase + " " + await result.Content.ReadAsStringAsync());
         }
 
         public async Task<BankAccountsResponse> GetBankAccountsAsync(BankAccountsRequest bankAccountsRequest)
@@ -289,7 +289,7 @@ namespace Exthand.GatewayClient
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
                 throw new GatewayException(error);
             }
-            throw new Exception(await result.Content.ReadAsStringAsync());
+            throw new Exception(result.StatusCode + " " + result.ReasonPhrase + " " + await result.Content.ReadAsStringAsync());
         }
 
         #endregion
@@ -313,7 +313,7 @@ namespace Exthand.GatewayClient
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
                 throw new GatewayException(error);
             }
-            throw new Exception(await result.Content.ReadAsStringAsync());
+            throw new Exception(result.StatusCode + " " + result.ReasonPhrase + " " + await result.Content.ReadAsStringAsync());
         }
 
         public async Task<TransactionResponse> GetTransactionsAsync(string accountId, TransactionRequest transactionRequest)
@@ -333,7 +333,7 @@ namespace Exthand.GatewayClient
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
                 throw new GatewayException(error);
             }
-            throw new Exception(await result.Content.ReadAsStringAsync());
+            throw new Exception(result.StatusCode + " " + result.ReasonPhrase + " " + await result.Content.ReadAsStringAsync());
         }
 
         public async Task<TransactionResponse> GetTransactionsNextAsync(string accountId, TransactionPagingRequest transactionRequest)
@@ -353,7 +353,7 @@ namespace Exthand.GatewayClient
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
                 throw new GatewayException(error);
             }
-            throw new Exception(await result.Content.ReadAsStringAsync());
+            throw new Exception(result.StatusCode + " " + result.ReasonPhrase + " " + await result.Content.ReadAsStringAsync());
         }
 
         #endregion
@@ -379,7 +379,7 @@ namespace Exthand.GatewayClient
                 throw new GatewayException(error);
             }
 
-            throw new Exception(await result.Content.ReadAsStringAsync());
+            throw new Exception(result.StatusCode + " " + result.ReasonPhrase + " " + await result.Content.ReadAsStringAsync());
         }
 
         /// <summary>
@@ -411,7 +411,7 @@ namespace Exthand.GatewayClient
                 throw new GatewayException(error);
             }
 
-            throw new Exception(await result.Content.ReadAsStringAsync());
+            throw new Exception(result.StatusCode + " " + result.ReasonPhrase + " " + await result.Content.ReadAsStringAsync());
         }
 
         /// <summary>
@@ -434,7 +434,7 @@ namespace Exthand.GatewayClient
                 var error = JsonSerializer.Deserialize<Error>(await result.Content.ReadAsStringAsync());
                 throw new GatewayException(error);
             }
-            throw new Exception(await result.Content.ReadAsStringAsync());
+            throw new Exception(result.StatusCode + " " + result.ReasonPhrase + " " + await result.Content.ReadAsStringAsync());
 
         }
 
